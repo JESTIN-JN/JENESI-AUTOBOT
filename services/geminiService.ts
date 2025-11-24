@@ -1,8 +1,11 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
+// Use the environment variable or the provided fallback key
+const API_KEY = process.env.API_KEY || "AIzaSyD6FmYd22rngTZfT2n617S3r7PZP6RJXyc";
+
 // Helper to get AI instance.
 const getAI = (apiKey?: string) => {
-  const key = apiKey || process.env.API_KEY;
+  const key = apiKey || API_KEY;
   if (!key) {
     console.warn("API Key not found in environment, relying on external injection if available.");
   }
@@ -97,7 +100,7 @@ export const generateSpeech = async (text: string): Promise<AudioBuffer | null> 
 
 // --- Video Generation (Veo) ---
 export const generateVideo = async (prompt: string, onStatusUpdate: (msg: string) => void): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
   const model = 'veo-3.1-fast-generate-preview';
 
   onStatusUpdate("Initializing video generation...");
@@ -127,7 +130,7 @@ export const generateVideo = async (prompt: string, onStatusUpdate: (msg: string
     throw new Error("No video URI returned from operation.");
   }
 
-  const finalUrl = `${videoUri}&key=${process.env.API_KEY}`;
+  const finalUrl = `${videoUri}&key=${API_KEY}`;
   
   try {
     const res = await fetch(finalUrl);
